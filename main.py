@@ -19,9 +19,6 @@ distinct_rows = [ Distinct(board[i]) for i in range(9) ]
 # distinct numbered cols
 distinct_cols = [ Distinct([ board[i][j] for i in range(9)]) for j in range(9) ]
 
-
-
-
 # distinct numbered 3x3
 distinct_sqrs = [ Distinct([ board[i][j] for i in range(3*a, 3*a + 3) for j in range(3*b, 3*b + 3)]) for a in range(3) for b in range(3)]
 
@@ -37,9 +34,14 @@ instance = ((0,6,0,0,1,2,0,5,0),
             (0,0,0,0,3,7,9,0,6),
             (0,0,6,0,0,0,2,7,0))
 
-instance_c = [ If(instance[i][j] == 0, True, board[i][j] == instance[i][j]) for i in range(9) for j in range(9)]
+instance_constraint = []
+for i in range(9):
+    for j in range(9):
+        if instance[i][j] != 0:
+            instance_constraint.append(board[i][j] == instance[i][j])
 
-s.add(sudoku + instance_c)
+
+s.add(sudoku + instance_constraint)
 
 tic = time.perf_counter()
 s.check()
